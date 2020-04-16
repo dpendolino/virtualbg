@@ -1,0 +1,24 @@
+version: '3'
+services:
+  bodypix:
+    build: ./bodypix
+    restart: unless-stopped
+    shm_size: 1g
+    # gpus: all
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    networks:
+      fakecam:
+  fakecam:
+    build: ./fakecam
+    restart: unless-stopped
+    devices:
+      - /dev/video20
+      - /dev/video1
+      - /dev/video0
+    user: "${UID}:${GID}"
+    networks:
+      fakecam:
+networks:
+  fakecam:
